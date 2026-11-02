@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheng-Je Lee · Bedside molecular diagnostics</title>
+<meta name="description" content="Cheng-Je Lee, Ph.D. — moving high-precision molecular testing to the bedside by integrating microfluidic chips, digital PCR, fast thermal cycling and a mobile robot.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Molecules travel meters. Results travel as signals.">
+<meta property="og:description" content="Cheng-Je Lee, Ph.D. — moving high-precision molecular testing to the bedside by integrating microfluidic chips, digital PCR, fast thermal cycling and a mobile robot.">
+<meta property="og:url" content="https://cheng-je-lee.github.io/">
+<meta property="og:image" content="https://cheng-je-lee.github.io/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231F4FD1'/%3E%3Ccircle cx='11' cy='16' r='4' fill='white'/%3E%3Cpath d='M17 16h9' stroke='white' stroke-width='3' stroke-linecap='round' stroke-dasharray='3 3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: a 1100px frame; reading text kept near 64ch; workflow, figures and the four field rows use the full frame. */
+:root{
+  --bg:#F3F6F6; --surface:#FFFFFF; --ink:#13212A; --muted:#536470; --line:#D3DCDF;
+  --accent:#1F4FD1; --accent-soft:#E4EAFB; --signal:#167F55; --signal-soft:#DCF1E7;
+  --display:"IBM Plex Sans Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1417; --surface:#151D21; --ink:#E3E9EB; --muted:#98A7AE; --line:#2A363C;
+    --accent:#88A3FF; --accent-soft:#1C2747; --signal:#52C895; --signal-soft:#123326; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1417; --surface:#151D21; --ink:#E3E9EB; --muted:#98A7AE; --line:#2A363C;
+  --accent:#88A3FF; --accent-soft:#1C2747; --signal:#52C895; --signal-soft:#123326; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.wrap{max-width:1100px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.12;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.2rem,5.2vw,3.7rem);font-weight:600;letter-spacing:-.01em}
+h2{font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:600}
+h3{font-size:1.3rem;font-weight:600}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.prose{max-width:64ch;display:grid;gap:14px}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono)}
+
+/* draft bar + header */
+.draft{background:var(--accent-soft);color:var(--ink);font-family:var(--mono);font-size:.75rem;letter-spacing:.04em}
+.draft .wrap{padding-block:8px}
+header .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:baseline;justify-content:space-between;padding-block:18px}
+.who{font-family:var(--display);font-weight:600;font-size:1.05rem}
+nav{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--mono);font-size:.78rem}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--accent)}
+
+/* hero */
+.hero .wrap{padding-block:40px 64px;display:grid;gap:22px}
+.hero .sub{max-width:60ch;font-size:1.12rem;color:var(--muted)}
+.tbd{font-family:var(--mono);font-size:.7rem;color:var(--muted);border:1px dashed var(--muted);border-radius:4px;padding:1px 6px;vertical-align:middle;white-space:nowrap}
+.ph{border:1.5px dashed var(--line);border-radius:10px;background:var(--surface);color:var(--muted);font-family:var(--mono);font-size:.8rem;line-height:1.5;display:grid;place-content:center;gap:8px;text-align:center;padding:20px;max-width:100%}
+.ph strong{font-weight:500;color:var(--ink)}
+.video{aspect-ratio:16/9;margin-top:10px}
+
+/* hero junction: four inlet channels merge into one outlet */
+.junction{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(40px,.32fr) minmax(0,.85fr);align-items:stretch;margin-top:6px}
+.inlets{list-style:none;margin:0;padding:0;display:grid;grid-template-rows:repeat(4,1fr);gap:10px;min-width:0}
+.inlet{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:3px;align-content:start;min-width:0}
+.inlet .itop{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.inlet h3{font-size:1.02rem}
+.inlet .has{font-family:var(--mono);font-size:.76rem;color:var(--muted);line-height:1.4}
+.kws{display:flex;flex-wrap:wrap;gap:4px;margin-block:2px}
+.kw{font-family:var(--mono);font-size:.7rem;line-height:1.5;border:1px solid var(--line);border-radius:999px;padding:1px 8px;background:var(--bg);color:var(--ink);overflow-wrap:anywhere}
+.inlet .gives{font-size:.95rem;line-height:1.4}
+.chan{position:relative;min-width:0}
+.chan svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.chan .pipe{fill:none;stroke:var(--line);stroke-width:12;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.chan .flow{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;stroke-dasharray:0 14;vector-effect:non-scaling-stroke;animation:flow 1.4s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-14}}
+.chan-v{display:none;height:56px}
+.outlet{align-self:center;background:var(--signal-soft);border:2px solid var(--signal);border-radius:12px;padding:18px;display:grid;gap:8px;min-width:0}
+.outlet h3{font-size:1.35rem}
+.outlet p{font-size:.95rem;line-height:1.45}
+.st.goal{border-color:var(--signal);color:var(--signal);justify-self:start}
+@media (max-width:760px){
+  .junction{grid-template-columns:minmax(0,1fr)}
+  .inlets{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}
+  .chan-h{display:none}
+  .chan-v{display:block}
+  .outlet{align-self:auto}
+}
+@media (max-width:480px){ .inlets{grid-template-columns:minmax(0,1fr)} }
+@media (prefers-reduced-motion:reduce){ .chan .flow{animation:none;stroke-dasharray:0 14} }
+
+/* sections */
+section{border-top:1px solid var(--line)}
+section > .wrap{padding-block:64px;display:grid;gap:28px}
+.head{display:grid;gap:10px}
+.pull{font-family:var(--display);font-size:1.35rem;font-weight:500;border-left:3px solid var(--accent);padding-left:14px;max-width:48ch}
+
+/* why now: two waves */
+.waves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.wave{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:8px;align-content:start;min-width:0}
+.wlbl{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.wave h3{font-size:1.4rem}
+.wave ul{margin:0;padding-left:1.1em;display:grid;gap:6px;font-size:.98rem}
+.sub3{font-size:1.05rem;margin-top:8px}
+@media (max-width:760px){ .waves{grid-template-columns:minmax(0,1fr)} }
+
+/* timeline (a real chronological sequence) */
+.timeline{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0}
+.timeline li{border-top:2px solid var(--line);padding:12px 16px 0 0;display:grid;gap:4px;min-width:0}
+.timeline .yr{font-family:var(--mono);font-size:.75rem;color:var(--accent)}
+.timeline .ev{font-family:var(--display);font-weight:600;line-height:1.25}
+.timeline .nt{font-size:.88rem;color:var(--muted);line-height:1.4}
+
+/* ASSURED */
+.assured{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.assured div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:2px}
+.assured b{font-family:var(--display);font-size:1.6rem;line-height:1;color:var(--accent)}
+.assured span{font-size:.85rem;line-height:1.35}
+.cite{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+
+/* quadrant figure */
+.fig{display:grid;gap:10px}
+.fig .scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.fig svg{display:block;width:100%;min-width:520px;height:auto}
+.fig figcaption{font-size:.85rem;color:var(--muted);max-width:70ch}
+svg .ax{stroke:var(--muted);stroke-width:1.5;fill:none}
+svg .arr{fill:var(--muted)}
+svg .cl{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.2}
+svg .tg{fill:var(--signal-soft);stroke:var(--signal);stroke-width:1.6;stroke-dasharray:6 5}
+svg .t1{fill:var(--ink);font-family:var(--display);font-size:15px;font-weight:600}
+svg .t2{fill:var(--muted);font-family:var(--mono);font-size:11px}
+svg .t3{fill:var(--signal);font-family:var(--display);font-size:15px;font-weight:600}
+svg .axl{fill:var(--muted);font-family:var(--mono);font-size:12px}
+
+/* comparison table */
+.cmp{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.cmp table{border-collapse:collapse;width:100%;min-width:920px;font-size:.88rem;line-height:1.4}
+.cmp th,.cmp td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+.cmp thead th{font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.cmp tbody th{font-family:var(--display);font-weight:600;font-size:.95rem}
+.cmp tbody tr:last-child th,.cmp tbody tr:last-child td{border-bottom:0}
+.cmp td.yes{color:var(--ink)}
+.cmp td.no,.cmp td.na{color:var(--muted)}
+.cmp tr.this th,.cmp tr.this td{background:var(--signal-soft)}
+.cmp tr.this td .st{margin-top:2px}
+.cmp tr.grp th{font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--bg);padding-block:6px}
+
+/* roadmap phases (a real sequence) */
+.phases{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.phases li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:8px;align-content:start;min-width:0;grid-row:span 4;grid-template-rows:subgrid}
+.phases li:first-child{border-color:var(--ink)}
+.phases .ph-top{display:flex;justify-content:space-between;align-items:center}
+.phases .n{width:27px;height:27px;border-radius:50%;border:2px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:.78rem;display:grid;place-items:center}
+.phases h3{font-size:1.1rem}
+.phases p{font-size:.9rem;line-height:1.45;color:var(--muted)}
+.phases dl{margin:4px 0 0;display:grid;gap:2px;font-size:.88rem;line-height:1.4}
+.phases dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-top:6px}
+.phases dd{margin:0}
+@media (max-width:960px){ .phases{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:560px){ .phases{grid-template-columns:minmax(0,1fr)} }
+
+/* hero: 1-D axis of where liquid becomes data */
+.axisfig .scroll{padding:8px 12px}
+.axisfig svg{min-width:600px}
+svg .liq{stroke:var(--accent);stroke-width:14;stroke-linecap:round}
+svg .sig{stroke:var(--signal);stroke-width:2.5;stroke-dasharray:7 6;fill:none}
+svg .sigfill{fill:var(--signal)}
+svg .conv{fill:var(--ink)}
+svg .conv.now{fill:var(--signal)}
+svg .guide{stroke:var(--muted);stroke-width:1;stroke-dasharray:2 4}
+svg .move{stroke:var(--muted);stroke-width:1.5}
+svg .rowl{fill:var(--ink);font-family:var(--display);font-size:15px;font-weight:600}
+svg .rowl.now,svg .cl1.now{fill:var(--signal)}
+svg .cl1{fill:var(--ink);font-family:var(--mono);font-size:12px}
+
+/* precision × mobility quadrant (CJ's chart) */
+.quad-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.quad{display:grid;grid-template-columns:28px minmax(0,1fr);grid-template-rows:auto auto;gap:8px;min-width:760px}
+.q-ylab{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:.75rem;color:var(--muted);text-align:center;align-self:center}
+.q-plot{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,auto);gap:14px 18px;padding:10px 10px 14px 14px;border-left:2px solid var(--muted);border-bottom:2px solid var(--muted)}
+.q-plot::before{content:"";position:absolute;left:-7px;top:-8px;border:6px solid transparent;border-bottom:9px solid var(--muted)}
+.q-plot::after{content:"";position:absolute;right:-8px;bottom:-7px;border:6px solid transparent;border-left:9px solid var(--muted)}
+.q-xlab{grid-column:2;display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.qbox{border:1.5px dashed var(--muted);border-radius:10px;background:var(--bg);padding:10px 12px;display:grid;gap:4px;align-content:start}
+.qbox h4{margin:0;font-family:var(--display);font-size:.98rem;font-weight:600}
+.qbox ul{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:.84rem;line-height:1.35}
+.qbox li::before{display:inline-block;width:1.2em;font-weight:600}
+.qbox li.ok::before{content:"✓";color:var(--signal)}
+.qbox li.no::before{content:"✗";color:var(--muted)}
+.q-lab{grid-column:1 / span 2;grid-row:1;justify-self:start;max-width:72%}
+.q-target{grid-column:3;grid-row:1;border:2px solid var(--signal);background:var(--signal-soft)}
+.q-pos{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--signal)}
+.q-mid{grid-column:2;grid-row:2;margin-left:-30%}
+.q-port{grid-column:3;grid-row:3}
+
+/* status + field tags */
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:.85rem;color:var(--muted)}
+.st{display:inline-block;font-family:var(--mono);font-size:.7rem;line-height:1.5;padding:1px 8px;border-radius:999px;border:1px solid var(--ink);white-space:nowrap;color:var(--ink)}
+.st.pub{background:var(--ink);color:var(--bg)}
+.st.sim{border-style:dashed;border-color:var(--accent);color:var(--accent)}
+.st.gap{border-style:dotted;border-color:var(--muted);color:var(--muted)}
+.dm{display:inline-grid;place-items:center;width:1.55em;height:1.55em;border-radius:50%;border:1px solid var(--muted);font-family:var(--mono);font-size:.7rem;color:var(--ink)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+
+/* workflow (a real process; numbers are its order) */
+.flow{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.flow li{position:relative;border-top:3px solid var(--line);padding:30px 16px 0 0;display:grid;gap:8px;align-content:start;min-width:0}
+.flow .n{position:absolute;top:-15px;left:0;width:27px;height:27px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:.78rem;display:grid;place-items:center}
+.flow h3{font-size:1.1rem}
+.flow p{font-size:.9rem;line-height:1.45;color:var(--muted)}
+@media (max-width:960px){ .flow{grid-template-columns:repeat(4,minmax(0,1fr));row-gap:40px} }
+@media (max-width:560px){
+  .flow{grid-template-columns:1fr;row-gap:0}
+  .flow li{border-top:0;border-left:3px solid var(--line);padding:0 0 26px 30px;margin-left:13px}
+  .flow .n{top:0;left:-15px}
+}
+
+/* four field rows */
+.fields{display:grid}
+.field{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px 44px;padding-block:40px;border-top:1px solid var(--line)}
+.field:first-child{border-top:0;padding-top:8px}
+.field .txt{display:grid;gap:12px;align-content:start;min-width:0}
+.field .ttl{display:flex;gap:12px;align-items:baseline}
+.field .ttl .dm{font-size:.8rem;flex:none;transform:translateY(-2px)}
+.field .tag{font-style:italic;color:var(--muted)}
+.field .hard{color:var(--muted)}
+.field .key{font-size:1.05rem;line-height:1.5;padding-left:12px;border-left:3px solid var(--accent)}
+.field .hard b,.field .key b{color:var(--ink);font-weight:600}
+.field ul{margin:0;padding-left:1.1em;display:grid;gap:6px;font-size:.98rem}
+.field .ph{aspect-ratio:4/3}
+.field .shot{margin:0;display:grid;gap:8px;align-content:start;min-width:0}
+.field .shot img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}
+.field .shot figcaption{font-size:.85rem;color:var(--muted)}
+.field .shot .cite a{color:inherit}
+.field .shot img.half{width:65%;justify-self:center}
+.field .shot.stack{gap:24px}
+.field .shot.stack img{justify-self:center}
+.field .shot.stack figcaption{margin-top:-12px}
+.field.wide{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)}
+.lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto 1fr auto;gap:14px 28px;align-items:stretch;min-width:0}
+.lanes-t,.lanes-k{grid-column:1 / -1}
+.lanes-t{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.lane{display:flex;flex-direction:column;gap:12px;min-width:0}
+.lane-h{display:grid;gap:3px;justify-items:start}
+.lane-h b{font-family:var(--display);font-size:1.02rem;font-weight:600}
+.lane-h small{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative}
+.steps::before{content:"";position:absolute;left:50%;top:12px;bottom:12px;border-left:1.5px solid var(--line);transform:translateX(-50%)}
+.steps.fill{flex:1;justify-content:space-between}
+.steps li{position:relative}
+.steps .nd{display:block;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 10px;font-size:.86rem;line-height:1.3}
+.steps .opt .nd{background:var(--accent-soft);border-color:var(--accent)}
+.steps .end .nd{border-color:var(--ink);font-weight:600}
+.strip-fig{margin:0;display:grid;gap:8px}
+.mx{display:grid;grid-template-columns:auto auto minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:center;max-width:320px;margin-inline:auto;font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.mx img{display:block;width:100%;height:auto;aspect-ratio:1/1;border-radius:6px;border:1px solid var(--line)}
+.mx .g15{grid-column:3 / 5;grid-row:1;text-align:center;color:var(--ink)}
+.mx .hd{grid-row:2;text-align:center}
+.mx .g146{grid-column:1;grid-row:3 / 5;writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;color:var(--ink)}
+.mx .rw{grid-column:2;text-align:right}
+@media (min-width:601px){ .mx{transform:translateX(-24px)} }
+.strip-fig figcaption{font-size:.82rem;color:var(--muted)}
+.strip-fig .cite a{color:inherit}
+.lanes-k{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
+.lanes-k i{width:14px;height:14px;border-radius:4px;background:var(--accent-soft);border:1px solid var(--accent);flex:none}
+@media (max-width:600px){
+  .lanes{grid-template-columns:minmax(0,1fr)}
+  .steps.fill{justify-content:flex-start}
+}
+@media (max-width:820px){ .field,.field.wide{grid-template-columns:minmax(0,1fr)} }
+
+/* architecture (robot) */
+.arch{display:grid;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;align-content:start}
+.layer{display:grid;grid-template-columns:4.6rem minmax(0,1fr);gap:10px;align-items:center}
+.layer .lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.boxes{display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+.box{flex:1 1 120px;border:1px solid var(--line);border-radius:7px;padding:8px 10px;font-family:var(--display);font-weight:600;font-size:.92rem;line-height:1.25;background:var(--bg);min-width:0}
+.box small{display:block;font-family:var(--body);font-weight:400;font-size:.78rem;color:var(--muted);margin-top:2px}
+.box.core{border-color:var(--accent);background:var(--accent-soft)}
+.box .tech{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:.64rem;font-weight:400;line-height:1.5;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:0 7px;white-space:nowrap}
+.box ul.sub{margin:4px 0 0;padding-left:1.05em;display:grid;gap:1px;font-family:var(--body);font-weight:400;font-size:.78rem;line-height:1.35;color:var(--muted)}
+.box.sim{background:transparent;border-style:dashed}
+/* architecture map (field 4) */
+.archmap{overflow-x:auto}
+.archmap svg{display:block;width:100%;min-width:560px;height:auto}
+.archmap .n{fill:var(--surface);stroke:var(--line)}
+.archmap .core{fill:var(--accent-soft);stroke:var(--accent)}
+.archmap .swap{fill:var(--surface);stroke:var(--muted);stroke-dasharray:4 3}
+.archmap .gc{fill:var(--accent-soft);fill-opacity:.45;stroke:var(--accent);stroke-opacity:.35}
+.archmap .gh{fill:var(--signal-soft);fill-opacity:.8;stroke:var(--signal);stroke-opacity:.35}
+.archmap .sim{fill:var(--bg);stroke:var(--muted);stroke-dasharray:5 4}
+.archmap .ln{stroke:var(--muted);stroke-width:1.3;fill:none}
+.archmap .ln.d{stroke-dasharray:4 3}
+.archmap .loop{stroke:var(--accent);stroke-width:2.2;fill:none}
+.archmap .ah{fill:var(--muted)}
+.archmap .aha{fill:var(--accent)}
+.archmap text{font-family:var(--body);fill:var(--muted);font-size:10px}
+.archmap .t{font-family:var(--display);font-weight:600;font-size:12px;fill:var(--ink)}
+.archmap .tb{font-family:var(--display);font-weight:600;font-size:13.5px;fill:var(--ink)}
+.archmap .lb{font-family:var(--mono);font-size:9.5px}
+.archmap .lb.a{fill:var(--accent)}
+.archmap .gl{font-family:var(--mono);font-size:9px;letter-spacing:.08em}
+.link{font-family:var(--mono);font-size:.68rem;color:var(--muted);padding-left:calc(4.6rem + 10px)}
+@media (max-width:480px){ .layer{grid-template-columns:minmax(0,1fr)} .link{padding-left:0} }
+
+/* beachhead: expansion list (left), base-case numbers (right) */
+.bh{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px 40px;align-items:stretch}
+.bh-left{grid-template-rows:auto 1fr auto;padding-block:18px}
+.bh-left .bh-list{align-content:start}
+.bh-left .bh-note{align-self:end}
+.bh-model{font-size:.92rem;line-height:1.5;color:var(--muted)}
+.bh-notes{margin:0;padding-left:1.1em;display:grid;gap:4px;font-size:.88rem;line-height:1.45;color:var(--muted)}
+.bh-model b{color:var(--ink);font-weight:600}
+.bh-left,.bh-right{display:grid;gap:14px;min-width:0}
+.bh-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.bh-list li{display:grid;gap:2px;padding-left:14px;border-left:3px solid var(--accent)}
+.bh-list b{font-family:var(--display);font-weight:600;font-size:1.05rem}
+.bh-list span{font-size:.95rem;color:var(--muted);line-height:1.45}
+.bh-note{font-size:.9rem}
+.bh-right{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.bh-scn{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.bh-figs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-block:14px}
+.bh-figs div{display:grid;gap:2px;border-top:1px solid var(--line);padding-top:8px}
+.bh-figs b{font-family:var(--display);font-size:1.7rem;font-weight:600;color:var(--accent);line-height:1.1;font-variant-numeric:tabular-nums}
+.bh-figs span{font-size:.85rem;color:var(--muted)}
+.bh-tbl{border-collapse:collapse;width:100%;font-size:.88rem}
+.bh-tbl th,.bh-tbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+.bh-tbl th{font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.bh-tbl td:last-child,.bh-tbl th:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.bh-ceil{font-size:.95rem}
+@media (max-width:820px){ .bh{grid-template-columns:minmax(0,1fr)} }
+
+/* outlook + vision */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px}
+.two > div{display:grid;gap:14px;align-content:start;min-width:0}
+.two ul{margin:0;padding-left:1.1em;display:grid;gap:6px}
+@media (max-width:820px){ .two{grid-template-columns:minmax(0,1fr)} }
+.chain{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.chain li{font-family:var(--display);font-weight:600;font-size:1.1rem;display:flex;gap:10px;align-items:baseline}
+.chain li::before{content:"↓";font-family:var(--mono);color:var(--accent);font-weight:400}
+.chain li:first-child::before{content:"";width:.6em}
+.chain li:last-child{color:var(--signal)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.impact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.impact > div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:10px;align-content:start;min-width:0;grid-row:span 3;grid-template-rows:subgrid}
+.impact .ilbl{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.impact h3{font-size:1.12rem;line-height:1.3}
+.impact ul{margin:0;padding-left:1.1em;display:grid;gap:6px;align-content:start;font-size:.95rem;line-height:1.45}
+.vis-foot{display:grid;gap:14px;margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
+.chain-h{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;row-gap:8px}
+.chain-h li{font-family:var(--display);font-weight:600;font-size:1rem;display:flex;align-items:center}
+.chain-h li+li::before{content:"→";font-family:var(--mono);font-weight:400;color:var(--accent);padding:0 14px}
+.chain-h li:last-child{color:var(--signal)}
+.drivers .chip{font-size:.8rem;padding:4px 12px;border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.drivers .clbl{flex-basis:100%;margin:0 0 2px}
+.clbl{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+@media (max-width:900px){ .impact{grid-template-columns:minmax(0,1fr)} .impact > div{grid-row:auto;grid-template-rows:none} }
+.chip{font-family:var(--mono);font-size:.74rem;border:1px solid var(--line);border-radius:999px;padding:2px 10px;background:var(--surface)}
+
+/* publications + tools */
+.pubs{margin:0;padding-left:1.2em;display:grid;gap:12px;max-width:80ch}
+.pubs li{font-size:.95rem;line-height:1.5}
+.pubs .doi{font-family:var(--mono);font-size:.78rem;word-break:break-all}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px}
+.tools div{display:grid;gap:4px;align-content:start}
+.tools h3{font-size:1rem}
+.tools p{font-size:.9rem;color:var(--muted);line-height:1.5}
+footer .wrap{padding-block:28px;font-family:var(--mono);font-size:.75rem;color:var(--muted);border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="who">Cheng-Je Lee, Ph.D.</div>
+    <nav aria-label="Sections">
+      <a href="#why-now">Why now</a>
+      <a href="#gap">The gap</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#fields">Four fields</a>
+      <a href="#roadmap">Next steps</a>
+      <a href="#beachhead">Business case</a>
+      <a href="#vision">Vision</a>
+      <a href="#publications">Publications</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">High-precision molecular detection · Microfluidic systems</div>
+    <h1>Molecules travel meters. Results travel as signals.</h1>
+    <p class="sub">Today a high-precision molecular test still sends the sample as liquid from the bed to a central lab before it becomes data. This work moves that conversion to the bedside, so only the result travels the long distance, at network speed.</p>
+
+    <figure class="fig axisfig" style="margin:0">
+      <div class="scroll">
+        <svg viewBox="0 0 760 270" role="img" aria-label="Where liquid becomes data. Today the sample travels as liquid from the bed to the central lab, where it becomes data. In this work it becomes data at the bed, and only the signal travels.">
+          <defs>
+            <marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" class="sigfill"/>
+            </marker>
+            <marker id="ah3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" class="arr"/>
+            </marker>
+          </defs>
+
+          <text x="78" y="75" text-anchor="end" class="rowl">Today</text>
+          <line x1="100" y1="70" x2="480" y2="70" class="liq"/>
+          <text x="290" y="50" text-anchor="middle" class="t2">liquid: tube, courier, queue · hours</text>
+          <path d="M480 58 L492 70 L480 82 L468 70 Z" class="conv"/>
+          <text x="480" y="102" text-anchor="middle" class="cl1">liquid → data</text>
+          <line x1="496" y1="70" x2="735" y2="70" class="sig" marker-end="url(#ah2)"/>
+          <text x="615" y="56" text-anchor="middle" class="t2">signal</text>
+
+          <text x="78" y="165" text-anchor="end" class="rowl now">This work</text>
+          <line x1="100" y1="160" x2="112" y2="160" class="liq"/>
+          <text x="106" y="140" text-anchor="middle" class="t2">~1 m</text>
+          <path d="M134 148 L146 160 L134 172 L122 160 Z" class="conv now"/>
+          <text x="122" y="192" class="cl1 now">liquid → data, at the bed</text>
+          <line x1="150" y1="160" x2="735" y2="160" class="sig" marker-end="url(#ah2)"/>
+          <text x="600" y="146" text-anchor="middle" class="t2">signal, at network speed</text>
+
+          <line x1="480" y1="108" x2="480" y2="235" class="guide"/>
+          <line x1="134" y1="198" x2="134" y2="235" class="guide"/>
+          <line x1="468" y1="222" x2="148" y2="222" class="move" marker-end="url(#ah3)"/>
+          <text x="308" y="214" text-anchor="middle" class="t2">the conversion point moves to the bed</text>
+
+          <line x1="100" y1="235" x2="745" y2="235" class="ax"/>
+          <line x1="100" y1="230" x2="100" y2="240" class="ax"/>
+          <line x1="250" y1="230" x2="250" y2="240" class="ax"/>
+          <line x1="480" y1="230" x2="480" y2="240" class="ax"/>
+          <text x="100" y="257" text-anchor="middle" class="axl">Bed</text>
+          <text x="250" y="257" text-anchor="middle" class="axl">Ward</text>
+          <text x="480" y="257" text-anchor="middle" class="axl">Central lab</text>
+          <text x="745" y="257" text-anchor="end" class="axl">Distance from the patient →</text>
+        </svg>
+      </div>
+      <figcaption><strong>Where liquid becomes data in a high-precision molecular test.</strong> Solid bar: the sample moves as liquid. Dashed line: the result moves as an electronic signal.</figcaption>
+    </figure>
+
+    <p class="sub">Glucose meters made this move for one measurement and reshaped diabetes care. This work aims to make the same move for precise molecular diagnosis. Then every bed becomes a source of molecular data. Getting there takes four fields working as one, each removing a limit of the others.</p>
+
+    <div class="junction" role="group" aria-label="Four fields converge into one bedside diagnostic system">
+      <ol class="inlets">
+        <li class="inlet">
+          <div class="itop"><span class="dm">1</span><span class="st pub">Published</span></div>
+          <h3>Microfluidic fabrication and control</h3>
+          <div class="kws"><span class="kw">Light, easy-to-make chip</span><span class="kw">Passive microfluidics</span></div>
+          <p class="gives">A robot only has to pipette and place the chip, so the test runs simply on site.</p>
+        </li>
+        <li class="inlet">
+          <div class="itop"><span class="dm">2</span><span class="st pub">Published</span></div>
+          <h3>Molecular assays and targets</h3>
+          <div class="kws"><span class="kw">Digital PCR</span><span class="kw">Multi-target detection</span></div>
+          <p class="gives">A lab-grade answer from one chip.</p>
+        </li>
+        <li class="inlet">
+          <div class="itop"><span class="dm">3</span><span class="st pub">Published</span></div>
+          <h3>Detection module: mechanics and thermal control</h3>
+          <div class="kws"><span class="kw">Low-thermal-mass heater</span><span class="kw">Closed-loop temperature control</span></div>
+          <p class="gives">Fast enough that the result comes back within the bedside visit.</p>
+        </li>
+        <li class="inlet">
+          <div class="itop"><span class="dm">4</span><span class="st sim">Simulated</span></div>
+          <h3>Robotic carrier</h3>
+          <div class="kws"><span class="kw">ROS 2 mobile manipulation</span><span class="kw">Vision-assisted operation</span></div>
+          <p class="gives">The lab goes to the patient.</p>
+        </li>
+      </ol>
+      <div class="chan chan-h" aria-hidden="true">
+        <svg viewBox="0 0 100 400" preserveAspectRatio="none">
+          <path class="pipe" d="M0 50 C55 50 45 200 100 200"/>
+          <path class="pipe" d="M0 150 C55 150 45 200 100 200"/>
+          <path class="pipe" d="M0 250 C55 250 45 200 100 200"/>
+          <path class="pipe" d="M0 350 C55 350 45 200 100 200"/>
+          <path class="flow" d="M0 50 C55 50 45 200 100 200"/>
+          <path class="flow" d="M0 150 C55 150 45 200 100 200"/>
+          <path class="flow" d="M0 250 C55 250 45 200 100 200"/>
+          <path class="flow" d="M0 350 C55 350 45 200 100 200"/>
+        </svg>
+      </div>
+      <div class="chan chan-v" aria-hidden="true">
+        <svg viewBox="0 0 400 60" preserveAspectRatio="none">
+          <path class="pipe" d="M50 0 C50 34 200 26 200 60"/>
+          <path class="pipe" d="M150 0 C150 34 200 26 200 60"/>
+          <path class="pipe" d="M250 0 C250 34 200 26 200 60"/>
+          <path class="pipe" d="M350 0 C350 34 200 26 200 60"/>
+          <path class="flow" d="M50 0 C50 34 200 26 200 60"/>
+          <path class="flow" d="M150 0 C150 34 200 26 200 60"/>
+          <path class="flow" d="M250 0 C250 34 200 26 200 60"/>
+          <path class="flow" d="M350 0 C350 34 200 26 200 60"/>
+        </svg>
+      </div>
+      <div class="outlet">
+        <span class="st goal">Goal</span>
+        <h3>Routine molecular monitoring, wherever the patient is</h3>
+        <p>Precise enough to guide treatment, simple and affordable enough to repeat.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="why-now">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Why now</div>
+      <h2>AI and robotics are reshaping the biomedical industry. On-site molecular diagnosis has been left out of both.</h2>
+    </div>
+    <div class="waves">
+      <div class="wave">
+        <span class="wlbl">Wave 1 · Information</span>
+        <h3>AI</h3>
+        <ul>
+          <li>AI advanced fastest where data is abundant: omics, drug discovery, pathology imaging, physiological signals.</li>
+          <li>Precise molecular diagnosis still produces its data in central labs, hours after sampling.</li>
+          <li>Better algorithms cannot fix this. It has to be solved in hardware.</li>
+        </ul>
+      </div>
+      <div class="wave">
+        <span class="wlbl">Wave 2 · Physical</span>
+        <h3>Robotics</h3>
+        <ul>
+          <li>Robots are entering hospitals for transport, surgical assistance and video or information displays, but not yet for point-of-care testing.</li>
+          <li>Point-of-care testing needs the test to be mobile and simple to operate. These robots can provide both.</li>
+          <li>What is missing is a module light and simple enough for a robot to run.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="pull">The hardware now exists in four pieces: microfluidics, assays, thermal control and robotics. None reaches on-site molecular testing alone. Together, they can.</p>
+  </div>
+</section>
+
+<section id="gap">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">The gap</div>
+      <h2>Precision or access. Today, you get one.</h2>
+    </div>
+    <div class="prose">
+      <p>Rapid point-of-care tests are cheap and simple, but they cannot prepare samples well or quantify trace biomarkers. Precise quantification can, but it stays tied to the central lab.</p>
+      <p>In microfluidic molecular diagnostics, point-of-care and benchtop development have advanced mostly within their own lanes: one makes tests simpler and cheaper, the other makes them more precise. Many academic studies aim to be both fast and precise, but few mature products bridge the two to run the whole path, from raw sample to result, in a portable form.</p>
+      <p class="muted">A point-of-care test should be ASSURED: Affordable, Sensitive, Specific, User-friendly, Rapid and robust, Equipment-free, Delivered to end users. <span class="cite">Clin Biochem Rev 35(3), 2014, 155</span></p>
+    </div>
+
+    <h3>The upper-right corner is empty.</h3>
+
+    <figure class="fig" style="margin:0">
+      <div class="quad-scroll">
+        <div class="quad" role="img" aria-label="Molecular detection devices by quantification and mobility. Lab-bound systems quantify absolutely but are bulky; in-lab sample-to-answer systems quantify relatively; portable devices are rapid but qualitative or semi-quantitative. The upper-right corner, movable with absolute quantification, is the potential positioning of a decentralized dPCR system.">
+          <div class="q-ylab">Quantification</div>
+          <div class="q-plot">
+            <div class="qbox q-lab">
+              <h4>Absolute quantification, Lab-bound</h4>
+              <ul><li class="ok">Detects low-frequency mutations</li><li class="ok">Excellent reproducibility</li><li class="no">Bulky systems</li><li class="no">Long turnaround time</li></ul>
+            </div>
+            <div class="qbox q-target">
+              <span class="q-pos">Potential positioning</span>
+              <h4>Decentralized dPCR System</h4>
+              <ul><li class="ok">Movable</li><li class="ok">Absolute quantification</li><li class="ok">Automated</li></ul>
+            </div>
+            <div class="qbox q-mid">
+              <h4>Relative quantification, In-Lab</h4>
+              <ul><li class="ok">Integrated sample-to-answer</li><li class="ok">Shorter turnaround time</li><li class="no">Needs a standard curve</li><li class="no">Requires dedicated lab space</li></ul>
+            </div>
+            <div class="qbox q-port">
+              <h4>Qualitative or semi-quantitative, Portable</h4>
+              <ul><li class="ok">Truly portable</li><li class="ok">Rapid on-site testing</li><li class="no">Lower sensitivity</li><li class="no">Limited functionality</li></ul>
+            </div>
+          </div>
+          <div class="q-xlab"><span>Lab-bound</span><span>Mobility / Portability</span><span>Portable</span></div>
+        </div>
+      </div>
+      <figcaption>Molecular detection devices by quantification and mobility. Positions are approximate.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>Below are existing products and recent studies, compared on where they test, who handles the sample and how they quantify.</p>
+    </div>
+
+    <figure class="fig" style="margin:0">
+      <div class="cmp">
+        <table>
+          <thead>
+            <tr><th scope="col">System</th><th scope="col">What it is</th><th scope="col">Near the patient</th><th scope="col">Moves bed to bed on its own</th><th scope="col">Who handles the sample</th><th scope="col">Absolute quantification (digital PCR)</th></tr>
+          </thead>
+          <tbody>
+            <tr class="grp"><th scope="rowgroup" colspan="6">Lab-bound</th></tr>
+            <tr><th scope="row">Thermo Fisher, Bio-Rad</th><td>Laboratory workstations</td><td class="no">No, central lab</td><td class="no">No</td><td>Lab staff</td><td class="yes">Yes</td></tr>
+            <tr class="grp"><th scope="rowgroup" colspan="6">In-lab, sample-to-answer</th></tr>
+            <tr><th scope="row">GeneXpert (Cepheid)</th><td>Cartridge-based instrument; third generation unveiled 2026</td><td class="yes">Near-patient labs, fixed site</td><td class="no">No</td><td>Clinical staff load the cartridge</td><td class="no">No, real-time PCR</td></tr>
+            <tr><th scope="row">Cobas Liat (Roche)</th><td>Cartridge-based instrument, results in 20 min or less</td><td class="yes">Near-patient labs, fixed site</td><td class="no">No</td><td>Clinical staff load the cartridge</td><td class="no">No, real-time PCR</td></tr>
+            <tr class="grp"><th scope="rowgroup" colspan="6">Portable</th></tr>
+            <tr><th scope="row">IDA (Kompass Diagnostics)</th><td>Palm-sized chemistry, immunoassay and molecular platform, about 10 min (2026)</td><td class="yes">Yes, finger-prick blood</td><td class="no">No</td><td>Staff or user applies the sample</td><td class="na">Not stated</td></tr>
+            <tr><th scope="row">TEMPO (HKUST)</th><td>Palm-sized one-pot CRISPR chip, about 35 min; research (Nature Commun. 2026)</td><td class="yes">Yes</td><td class="no">No</td><td>User runs the chip, smartphone reads it</td><td class="no">No, semi-quantitative</td></tr>
+            <tr class="grp"><th scope="rowgroup" colspan="6">Hospital robots</th></tr>
+            <tr><th scope="row">Moxi (Diligent Robotics)</th><td>Hospital logistics robot</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">Carries it to the lab</td><td class="na">— no test</td></tr>
+            <tr><th scope="row">Nurabot (Foxconn)</th><td>Nursing assistant robot for transport and logistics; multisite in Taiwan (2026)</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="na">—</td><td class="na">— no test</td></tr>
+            <tr><th scope="row">Aletta (Vitestro)</th><td>Autonomous blood-drawing robot; FDA-cleared for outpatient clinics (2026)</td><td class="yes">Yes, outpatient clinic</td><td class="no">No, stationary</td><td class="no">Draws the blood; tubes go to the lab</td><td class="na">— no test</td></tr>
+            <tr class="grp"><th scope="rowgroup" colspan="6">This work</th></tr>
+            <tr class="this"><th scope="row">This work</th><td>Onboard lab on a mobile robot</td><td>Yes <span class="st sim">Simulated</span></td><td>Yes <span class="st sim">Simulated</span></td><td>The robot, after hand-over <span class="st gap">Not yet on the robot</span></td><td>Yes <span class="st pub">Chip published</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <figcaption>Systems named in the Perspective, plus products and studies reported in 2026 (company announcements and published papers). Simplified; capabilities vary by product model.</figcaption>
+    </figure>
+
+  </div>
+</section>
+
+<section id="workflow">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Approach</div>
+      <h2>One workflow, from sample to result.</h2>
+    </div>
+    <div class="prose"><p>Nucleic acid detection is the worked example. It offers high specificity and a very low limit of detection, and it is the test that most depends on a laboratory.</p></div>
+    <div class="legend">
+      <span class="tags"><span class="st pub">Published</span><span class="st">Lab-validated</span><span class="st sim">Simulated</span><span class="st gap">Not yet on the robot</span></span>
+    </div>
+    <ol class="flow">
+      <li><span class="n">1</span><h3>Reach the bed</h3><p>The robot drives to the called bed and receives the sample.</p>
+        <div class="tags"><span class="st sim">Simulated</span></div></li>
+      <li><span class="n">2</span><h3>Load</h3><p>The robot pipettes the sample into the chip, which meters it and each reagent that follows.</p>
+        <div class="tags"><span class="st pub">Published</span><span class="st sim">Loading simulated</span></div></li>
+      <li><span class="n">3</span><h3>Extract</h3><p>Magnetic-bead extraction purifies the nucleic acids on the chip.</p>
+        <div class="tags"><span class="st">Lab-validated</span></div></li>
+      <li><span class="n">4</span><h3>Digitize</h3><p>The sample splits into a static droplet array.</p>
+        <div class="tags"><span class="st pub">Published</span></div></li>
+      <li><span class="n">5</span><h3>Amplify</h3><p>Rapid thermal cycling on a low-thermal-mass heater.</p>
+        <div class="tags"><span class="st pub">Published</span></div></li>
+      <li><span class="n">6</span><h3>Read</h3><p>Fluorescence readout with absolute, multiplex quantification.</p>
+        <div class="tags"><span class="st pub">Published</span></div></li>
+      <li><span class="n">7</span><h3>Report</h3><p>The result goes out as data. The robot discards the chip on board and moves on to the next bed.</p>
+        <div class="tags"><span class="st sim">Simulated</span><span class="st gap">Database not yet</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="fields">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Four fields</div>
+      <h2>What holds the workflow up.</h2>
+    </div>
+    <div class="fields">
+
+      <div class="field">
+        <div class="txt">
+          <div class="ttl"><span class="dm">1</span><h3>Microfluidic fabrication and control</h3></div>
+          <p class="tag">Chips that run themselves, made like packaging.</p>
+          <p class="hard"><b>The hard part:</b> Microfluidic chips usually depend on external pumps, valves and tubing, more than a robot can carry or run at the bed.</p>
+          <p class="key"><b>Key result:</b> The chip runs with no external pump. Operation takes two steps: load the reagents, then pierce the vacuum pouch. (Lab Chip 2019, back cover)</p>
+          <ul>
+            <li>A lightweight thin-film chip. Its stored vacuum lasts for weeks, and one design covers flow rates across four orders of magnitude. (Lab Chip 2019)</li>
+            <li>Soft hot embossing forms deep microchannels and microwell arrays in 188 µm COP film. Single-layer patterns vary less than 3% in height. (JMM 2022)</li>
+            <li>One pneumatic source releases pre-stored reagents in sequence through a microfluidic chain reaction, with no valves. (IEEE NEMS 2024)</li>
+          </ul>
+          <div class="tags"><span class="st pub">Published</span></div>
+        </div>
+        <figure class="shot">
+          <img src="img/vpm_cover.jpg" width="1480" height="1071" loading="lazy" alt="A gloved hand holds a thin plastic film chip sealed in a clear vacuum pouch, with colored reagent droplets on its loading areas.">
+          <figcaption>Vacuum pouch chip, featured on the back cover of Lab on a Chip.<br><span class="cite">Reproduced from C.-J. Lee and Y.-H. Hsu, <a href="https://doi.org/10.1039/C8LC01286E">Lab Chip, 2019, 19, 2834</a>, with permission from the Royal Society of Chemistry.</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="field wide">
+        <div class="txt">
+          <div class="ttl"><span class="dm">2</span><h3>Molecular assays and targets</h3></div>
+          <p class="tag">The right target, counted molecule by molecule.</p>
+          <p class="hard"><b>Why digital PCR:</b> Absolute quantification without reference genes, suited to low-abundance targets such as rare mutations or small samples.</p>
+          <p class="key"><b>Key result:</b> Digital PCR ran on a system built in-house: the thin-film chip, vacuum pouch loading and a custom thermal cycler. Its quantification agreed with commercial qRT-PCR. (Microfluid Nanofluid 2022)</p>
+          <ul>
+            <li>Two disease areas, RNA and DNA targets, from synthetic standards to human plasma.</li>
+          </ul>
+        </div>
+        <div class="lanes">
+          <div class="lanes-t">From sample to quantified target</div>
+          <div class="lane">
+            <div class="lane-h"><b>COPD</b><small>RNA targets</small><span class="st pub">Published</span></div>
+            <ol class="steps">
+              <li><span class="nd">Synthetic microRNA standards</span></li>
+              <li><span class="nd">Reverse transcription</span></li>
+              <li><span class="nd">On-chip digital PCR, two colors</span></li>
+              <li class="end"><span class="nd">miR-15b and miR-146a quantified</span></li>
+            </ol>
+            <figure class="strip-fig">
+              <div class="mx" role="img" aria-label="Droplet arrays from one chip at four combinations of two microRNA targets. Green droplets dominate when only miR-15b is high, red when only miR-146a is high, and most droplets turn yellow when both are high.">
+                <span class="g15">miR-15b · green</span>
+                <span class="hd" style="grid-column:3">Low</span><span class="hd" style="grid-column:4">High</span>
+                <span class="g146">miR-146a · red</span>
+                <span class="rw" style="grid-row:3">Low</span>
+                <img style="grid-column:3;grid-row:3" src="img/dpcr_mx_b.jpg" width="372" height="372" loading="lazy" alt="">
+                <img style="grid-column:4;grid-row:3" src="img/dpcr_mx_c.jpg" width="372" height="372" loading="lazy" alt="">
+                <span class="rw" style="grid-row:4">High</span>
+                <img style="grid-column:3;grid-row:4" src="img/dpcr_mx_d.jpg" width="372" height="372" loading="lazy" alt="">
+                <img style="grid-column:4;grid-row:4" src="img/dpcr_mx_e.jpg" width="372" height="372" loading="lazy" alt="">
+              </div>
+              <figcaption><span class="cite">Adapted from C.-J. Lee and Y.-H. Hsu, <a href="https://doi.org/10.1007/s10404-021-02507-x">Microfluid. Nanofluid. 26, 4 (2022)</a>, Springer Nature.</span></figcaption>
+            </figure>
+          </div>
+          <div class="lane">
+            <div class="lane-h"><b>Colorectal cancer</b><small>DNA targets</small><span class="st">Lab-validated</span></div>
+            <ol class="steps fill">
+              <li><span class="nd">Human plasma</span></li>
+              <li class="opt"><span class="nd">Exosome enrichment</span></li>
+              <li class="opt"><span class="nd">DNA purification</span></li>
+              <li class="opt"><span class="nd">Elution</span></li>
+              <li><span class="nd">Droplet digital PCR (Bio-Rad)</span></li>
+              <li class="end"><span class="nd">APC and KRAS fragments quantified</span></li>
+            </ol>
+          </div>
+          <div class="lanes-k"><i></i>Optimized step: tuned to concentrate the recovered DNA fragments</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="txt">
+          <div class="ttl"><span class="dm">3</span><h3>Detection module: mechanics and thermal control</h3></div>
+          <p class="tag">Less thermal mass, faster detection.</p>
+          <p class="hard"><b>The hard part:</b> A standard PCR cycle takes one to two minutes, the main reason a full test takes hours.</p>
+          <p class="key"><b>Key result:</b> 40 PCR cycles in 13.3 minutes on the thin-film chip. (Microfluid Nanofluid 2022)</p>
+          <ul>
+            <li>Low thermal mass: the chip is under 0.3 mm thick, and its droplets sit less than 50 µm from the heater.</li>
+            <li>Assembled in-house: polyimide film heater, a 6 cm fan, and Arduino control with thermocouple feedback.</li>
+            <li>Temperature cycling and temperature distribution validated by COMSOL simulation results.</li>
+          </ul>
+          <div class="tags"><span class="st pub">Published</span></div>
+        </div>
+        <figure class="shot stack">
+          <img style="width:70%" src="img/thermal_schematic.jpg" width="804" height="385" loading="lazy" alt="The in-house thermal cycler: the dPCR chip on a polyimide heater inside a fan-cooled wind tunnel, controlled by an Arduino board with thermocouple feedback.">
+          <img style="width:70%" src="img/thermal_map.jpg" width="906" height="592" loading="lazy" alt="COMSOL temperature maps of the heater layers and the top and bottom of the dPCR chip at 85, 65.3, 44.8 and 57.6 degrees Celsius, showing uniform temperature over the amplification region.">
+          <img style="width:70%" src="img/dpcr_cycles.jpg" width="649" height="352" loading="lazy" alt="Measured and simulated temperature over 40 cycles between about 45 and 85 degrees Celsius, finishing at about 800 seconds.">
+          <figcaption><span class="cite">Adapted from C.-J. Lee and Y.-H. Hsu, <a href="https://doi.org/10.1007/s10404-021-02507-x">Microfluid. Nanofluid. 26, 4 (2022)</a>, Springer Nature.</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="field wide">
+        <div class="txt">
+          <div class="ttl"><span class="dm">4</span><h3>Robotic carrier</h3></div>
+          <p class="tag">A lab that drives to the bed.</p>
+          <p class="hard"><b>The hard part:</b> Molecular tests like these run in core labs, on expensive instruments operated by trained staff.</p>
+          <p class="key"><b>Key result:</b> A virtual prototype built in ROS 2 and Gazebo, in which a mobile robot runs the test with its own arms.</p>
+          <ul>
+            <li>The robot: a mobile base with autonomous navigation (Nav2), two six-axis arms (MoveIt 2), and cameras and lidars for vision.</li>
+            <li>The setting: a Gazebo hospital floor with three wards and six beds. Staff call the robot to a bed from a web page.</li>
+            <li>The run: it drives to the bedside, its arms carry out the test, and it returns.</li>
+          </ul>
+          <div class="tags"><span class="st sim">Simulated</span></div>
+        </div>
+        <figure class="shot">
+          <div class="archmap">
+          <svg viewBox="0 0 640 528" role="img" aria-label="Robot architecture. Web pages talk to a task state machine over HTTP. For every test step the state machine sends a step to the arm commander, which plans with MoveIt 2 and drives the arm controllers in Gazebo; cameras send images to chip vision, which returns a check result to the state machine before the next step. A work-zone watch reports intrusions, and the state machine pauses the arms. In hospital mode, a hospital watch reports obstacles. Navigation receives goals and drives the base. A mode manager runs only one of the two mode groups at a time. The sensor answer and the reaction device are simulation backends behind fixed interfaces.">
+            <defs>
+              <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="ah"/></marker>
+              <marker id="ama" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="aha"/></marker>
+            </defs>
+
+            <!-- mode groups -->
+            <rect class="gc" x="8" y="84" width="418" height="364" rx="10"/>
+            <text class="gl" x="416" y="440" text-anchor="end">CHIP MODE</text>
+            <text class="lb a" x="20" y="440">act → see → check, every step</text>
+            <rect class="gh" x="440" y="156" width="192" height="120" rx="10"/>
+            <text class="gl" x="622" y="270" text-anchor="end">HOSPITAL MODE</text>
+
+            <!-- top row -->
+            <rect class="n" x="8" y="12" width="90" height="52" rx="7"/>
+            <text class="t" x="53" y="34" text-anchor="middle">Web pages</text>
+            <text x="53" y="50" text-anchor="middle">for staff</text>
+            <rect class="core" x="128" y="8" width="392" height="58" rx="8"/>
+            <text class="tb" x="324" y="31" text-anchor="middle">Task state machine</text>
+            <text x="324" y="49" text-anchor="middle">recipe steps · step checks · recovery · wait rules</text>
+            <rect class="n" x="548" y="12" width="84" height="52" rx="7"/>
+            <text class="t" x="590" y="34" text-anchor="middle">Navigation</text>
+            <text x="590" y="50" text-anchor="middle">Nav2</text>
+            <line class="ln" x1="99" y1="38" x2="127" y2="38" marker-start="url(#am)" marker-end="url(#am)"/>
+            <text class="lb" x="113" y="30" text-anchor="middle">HTTP</text>
+            <line class="ln" x1="520" y1="38" x2="547" y2="38" marker-end="url(#am)"/>
+            <text class="lb" x="534" y="30" text-anchor="middle">goal</text>
+
+            <!-- mode manager -->
+            <rect class="n" x="460" y="84" width="152" height="44" rx="7"/>
+            <text class="t" x="536" y="102" text-anchor="middle">Mode manager</text>
+            <text x="536" y="118" text-anchor="middle">one group runs at a time</text>
+            <line class="ln" x1="500" y1="66" x2="500" y2="83" marker-end="url(#am)"/>
+            <text class="lb" x="506" y="79">switch</text>
+            <line class="ln d" x1="536" y1="128" x2="536" y2="155" marker-end="url(#am)"/>
+            <text class="lb" x="544" y="146">starts · stops</text>
+
+            <!-- arm chain (the loop) -->
+            <rect class="n" x="24" y="110" width="176" height="42" rx="7"/>
+            <text class="t" x="112" y="128" text-anchor="middle">Arm commander</text>
+            <text x="112" y="144" text-anchor="middle">runs steps · pauses</text>
+            <rect class="n" x="24" y="186" width="176" height="42" rx="7"/>
+            <text class="t" x="112" y="204" text-anchor="middle">MoveIt 2</text>
+            <text x="112" y="220" text-anchor="middle">motion planning</text>
+            <rect class="n" x="24" y="262" width="176" height="42" rx="7"/>
+            <text class="t" x="112" y="280" text-anchor="middle">Arm controllers</text>
+            <text x="112" y="296" text-anchor="middle">joint trajectories</text>
+            <line class="loop" x1="150" y1="66" x2="150" y2="108" marker-end="url(#ama)"/>
+            <text class="lb a" x="156" y="92">step · pause</text>
+            <line class="loop" x1="112" y1="152" x2="112" y2="184" marker-end="url(#ama)"/>
+            <text class="lb a" x="118" y="173">plan</text>
+            <line class="loop" x1="112" y1="228" x2="112" y2="260" marker-end="url(#ama)"/>
+            <text class="lb a" x="118" y="249">trajectory</text>
+            <line class="loop" x1="112" y1="304" x2="112" y2="468" marker-end="url(#ama)"/>
+            <text class="lb a" x="118" y="460">joints</text>
+
+            <!-- chip vision -->
+            <rect class="n" x="216" y="110" width="180" height="118" rx="7"/>
+            <text class="t" x="306" y="128" text-anchor="middle">Chip vision</text>
+            <text x="306" y="142" text-anchor="middle">router merges two answers</text>
+            <rect class="n" x="226" y="154" width="76" height="64" rx="6"/>
+            <text class="t" x="264" y="181" text-anchor="middle" style="font-size:11px">Camera</text>
+            <text x="264" y="197" text-anchor="middle">AprilTag</text>
+            <rect class="swap" x="310" y="154" width="76" height="64" rx="6"/>
+            <text class="t" x="348" y="176" text-anchor="middle" style="font-size:11px">Sensor</text>
+            <text x="348" y="192" text-anchor="middle">sim truth</text>
+            <text x="348" y="207" text-anchor="middle">swappable</text>
+            <line class="loop" x1="256" y1="470" x2="256" y2="220" marker-end="url(#ama)"/>
+            <text class="lb a" x="250" y="460" text-anchor="end">images</text>
+            <line class="loop" x1="306" y1="110" x2="306" y2="68" marker-end="url(#ama)"/>
+            <text class="lb a" x="312" y="92">check result</text>
+
+            <!-- work-zone watch -->
+            <rect class="n" x="300" y="262" width="116" height="42" rx="7"/>
+            <text class="t" x="358" y="280" text-anchor="middle" style="font-size:11.5px">Work-zone watch</text>
+            <text x="358" y="296" text-anchor="middle">top depth camera</text>
+            <line class="ln" x1="360" y1="470" x2="360" y2="306" marker-end="url(#am)"/>
+            <text class="lb" x="366" y="460">depth</text>
+            <line class="ln" x1="406" y1="262" x2="406" y2="68" marker-end="url(#am)"/>
+            <text class="lb" x="400" y="253" text-anchor="end">intrusion</text>
+
+            <!-- hospital watch -->
+            <rect class="n" x="452" y="172" width="168" height="78" rx="7"/>
+            <text class="t" x="536" y="191" text-anchor="middle">Hospital watch</text>
+            <text x="536" y="207" text-anchor="middle">head camera, lidars</text>
+            <text x="536" y="222" text-anchor="middle">fine-tuned YOLO-World</text>
+            <text x="536" y="237" text-anchor="middle">people · carts · boxes</text>
+            <polyline class="ln" points="452,200 446,200 446,68" marker-end="url(#am)"/>
+            <text class="lb" x="454" y="146">obstacles</text>
+            <line class="ln" x1="580" y1="470" x2="580" y2="252" marker-end="url(#am)"/>
+            <text class="lb" x="574" y="460" text-anchor="end">camera, lidars</text>
+
+            <!-- reaction device -->
+            <rect class="n" x="440" y="292" width="100" height="34" rx="6"/>
+            <text class="t" x="490" y="313" text-anchor="middle" style="font-size:11px">Device interface</text>
+            <rect class="swap" x="440" y="340" width="100" height="32" rx="6"/>
+            <text x="490" y="360" text-anchor="middle">reaction mock</text>
+            <line class="ln" x1="490" y1="326" x2="490" y2="340"/>
+            <polyline class="ln" points="433,66 433,309 438,309" marker-end="url(#am)"/>
+            <text class="lb" x="444" y="287">start · abort · result</text>
+
+            <!-- navigation to base -->
+            <line class="ln" x1="624" y1="64" x2="624" y2="468" marker-end="url(#am)"/>
+            <text class="lb" x="618" y="420" text-anchor="end">wheel speed</text>
+
+            <!-- simulation -->
+            <rect class="sim" x="8" y="470" width="624" height="50" rx="8"/>
+            <text class="t" x="320" y="491" text-anchor="middle">Gazebo</text>
+            <text x="320" y="508" text-anchor="middle">robot base · two arms · onboard lab · chip · cameras · lidars · hospital floor</text>
+          </svg>
+          </div>
+          <figcaption>Blue: the loop every test step goes through. Shaded: the two mode groups, one running at a time. Dashed: simulation stand-ins behind fixed interfaces, to be swapped for hardware.</figcaption>
+        </figure>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Next steps</div>
+      <h2>From chip to the ward.</h2>
+    </div>
+    <ol class="phases">
+      <li>
+        <div class="ph-top"><span class="n">1</span><span class="st gap">Next</span></div>
+        <h3>Chip module</h3>
+        <p>One microfluidic chip integrates loading, extraction, mixing and digitization, simple enough for a robot arm to operate.</p>
+        <dl><dt>Proves</dt><dd>The chip steps work together, from raw sample to droplets, with no extra instruments.</dd></dl>
+      </li>
+      <li>
+        <div class="ph-top"><span class="n">2</span><span class="st gap">Later</span></div>
+        <h3>Device modules</h3>
+        <p>The reaction module (thermal control, mechanics, fluid control, optical detection) and the software module (image and signal processing, database) come together as a benchtop instrument.</p>
+        <dl><dt>Proves</dt><dd>The chip, thermal cycling, optics and software, each validated separately so far, work as one integrated instrument.</dd></dl>
+      </li>
+      <li>
+        <div class="ph-top"><span class="n">3</span><span class="st gap">Later</span></div>
+        <h3>Robot prototype</h3>
+        <p>The benchtop instrument mounted on the mobile robot, with real arms, cameras and safety hardware. The robot drives to the bed, loads the chip with its arms and runs the test on board.</p>
+        <dl><dt>Proves</dt><dd>The integrated instrument keeps working on a moving robot, loaded by the robot's own arms.</dd></dl>
+      </li>
+      <li>
+        <div class="ph-top"><span class="n">4</span><span class="st gap">Later</span></div>
+        <h3>Clinical field validation</h3>
+        <p>A pilot in hospital wards. Staff call the robot, hand over real patient samples, and receive the results at the bedside.</p>
+        <dl><dt>Proves</dt><dd>The robot completes the test in daily clinical routine, and its results agree with the hospital's central lab.</dd></dl>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="beachhead">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Business case</div>
+      <h2>Start with one hospital and one use case. Then expand.</h2>
+    </div>
+    <div class="bh">
+      <div class="bh-right">
+        <h3>Base case</h3>
+        <p class="bh-scn">One hospital · one cancer (colorectal, recurrence monitoring) · one method (dPCR) · one robot · one year</p>
+        <div class="bh-figs">
+          <div><b>~3,400</b><span>tests per year</span></div>
+          <div><b>~14</b><span>tests per working day</span></div>
+          <div><b>~US$120</b><span>per test <span class="tbd">assumed</span></span></div>
+          <div><b>~US$420K</b><span>revenue per year</span></div>
+        </div>
+        <ul class="bh-notes">
+          <li>Based on the Taiwan Cancer Registry: 19,074 new colorectal cancer cases in 2023.</li>
+          <li>Assumes 5% of these patients are followed at this hospital.</li>
+          <li>Eligibility (30%), test frequency (2.4 per year) and follow-up length (5 years) are estimates.</li>
+          <li>The price references the NTUH self-pay KRAS test (NT$4,000), converted at 32.6 TWD per USD.</li>
+        </ul>
+        <p class="bh-ceil">Taiwan ceiling for colorectal cancer, if every eligible patient is tested: <b>~US$8.4M per year</b>.</p>
+      </div>
+      <div class="bh-left">
+        <h3>Expansion</h3>
+        <ul class="bh-list">
+          <li><b>More targets</b><span>Lung cancer (EGFR) and breast cancer (ESR1, PIK3CA) on the same monitoring workflow</span></li>
+          <li><b>More technologies</b><span>Immunoassays for proteins and other biomarkers, beyond nucleic acid testing</span></li>
+          <li><b>More use cases</b><span>Chronic disease: COPD, hepatitis B viral load. Acute care: sepsis, respiratory and drug-resistant infections</span></li>
+          <li><b>More sites</b><span>More hospitals and countries, and settings such as long-term care</span></li>
+        </ul>
+        <p class="muted bh-note">GeneXpert grew the same way: anthrax screening for the US Postal Service in 2004, hospital MRSA screening in 2007, tuberculosis in 2010.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="vision">
+  <div class="wrap">
+    <div class="two">
+      <div>
+        <div class="eyebrow">Outlook</div>
+        <h2>A robot that takes the critical steps.</h2>
+        <p>A point-of-care robot that performs the critical steps for trained staff, inside regulated clinical environments.</p>
+        <ul>
+          <li>Fewer hands on high-risk specimens: staff hand over the sample once, and the robot does the rest</li>
+          <li>Every step is checked before the next one starts</li>
+          <li>The result is ready at the bed, in the same visit</li>
+          <li>No sample runs to the lab</li>
+        </ul>
+      </div>
+      <div>
+        <div class="eyebrow">Vision</div>
+        <h2>Decentralized precision diagnostics.</h2>
+        <div class="chips drivers"><span class="clbl">Driven by</span><span class="chip">Aging society</span><span class="chip">Healthcare inequality</span><span class="chip">Long-term monitoring</span></div>
+        <p>AI has transformed omics, drug discovery and pathology imaging. Bedside molecular testing still cannot deliver its stream of information. Once detection is decentralized, the same platform extends beyond nucleic acids to immunoassays and bioelectrical signals, giving denser, timelier information for personalized medicine, early cancer screening, prognosis and treatment guidance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Publications</div>
+      <h2>Papers and talks.</h2>
+    </div>
+    <ol class="pubs">
+      <li>Lee, C.-J. A Perspective on Decentralized Microfluidic Detection for Biomedical Point-of-Care Applications.</li>
+      <li>Lee, C.-J. &amp; Hsu, Y.-H. Study on soft hot embossing process for making microstructures in a cyclo-olefin polymeric (COP) film. <em>J. Micromech. Microeng.</em> 32(10), 105008 (2022). <a class="doi" href="https://doi.org/10.1088/1361-6439/ac8e11">doi.org/10.1088/1361-6439/ac8e11</a></li>
+      <li>Lee, C.-J. &amp; Hsu, Y.-H. A size reduction method for rapid digital PCR using thin-film chip and vacuum pouch microfluidic system. <em>Microfluid. Nanofluid.</em> 26, 4 (2022). <a class="doi" href="https://doi.org/10.1007/s10404-021-02507-x">doi.org/10.1007/s10404-021-02507-x</a></li>
+      <li>Lee, C.-J. &amp; Hsu, Y.-H. Vacuum pouch microfluidic system and its application for thin-film micromixers. <em>Lab Chip</em> 19, 2834–2843 (2019). Back cover. <a class="doi" href="https://doi.org/10.1039/C8LC01286E">doi.org/10.1039/C8LC01286E</a></li>
+      <li>Conferences: MicroTAS (online 2020, Kaohsiung 2018); IEEE NEMS (Kyoto 2024, Los Angeles 2017, Sendai 2016)</li>
+    </ol>
+
+    <div class="tools">
+      <div><h3>Microfluidic fabrication and control</h3><p>MEMS photolithography, soft lithography, hot embossing, lamination and thermal fusion bonding, microfluidic control</p></div>
+      <div><h3>Molecular assays</h3><p>Exosome enrichment, nucleic acid extraction (spin column, magnetic bead), QC (Qubit, Nanodrop), primer design, RT-PCR, qPCR, digital PCR</p></div>
+      <div><h3>Thermal design and control</h3><p>Low-thermal-mass heater design, temperature control with thermocouple feedback (Arduino), COMSOL thermal simulation</p></div>
+      <div><h3>Robotics, integration and AI</h3><p>System architecture and state-machine design, ROS 2, MoveIt 2, Nav2, Gazebo, vision model fine-tuning (YOLO-World)</p></div>
+      <div><h3>Tools and instruments</h3><p>AutoCAD, SolidWorks, Creo, ImageJ; fluorescence microscope, profilometer, confocal microscope, SEM, AFM</p></div>
+    </div>
+
+    <p class="muted">Full publication list: <a href="https://scholar.google.com/citations?user=aW2jhXIAAAAJ&amp;hl=en">Google Scholar</a></p>
+  </div>
+</section>
+
+<footer><div class="wrap">© 2026 Cheng-Je Lee</div></footer>
+</body>
+</html>
