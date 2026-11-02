@@ -374,6 +374,8 @@ svg .cl1{fill:var(--ink);font-family:var(--mono);font-size:12px}
 .tools p{font-size:.9rem;color:var(--muted);line-height:1.5}
 footer .wrap{padding-block:28px;font-family:var(--mono);font-size:.75rem;color:var(--muted);border-top:1px solid var(--line)}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+/* laptop-width windows (typical with display scaling): render at 75%; wider monitors already show the page at this proportion */
+@media (min-width:1200px) and (max-width:1700px){ html{zoom:.75} }
 </style>
 
 </head>
