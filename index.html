@@ -244,6 +244,11 @@ svg .cl1{fill:var(--ink);font-family:var(--mono);font-size:12px}
 .field .shot.stack img{justify-self:center}
 .field .shot.stack figcaption{margin-top:-12px}
 .field.wide{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)}
+.field .shot.demo{grid-column:1 / -1}
+.field .shot video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:10px;border:1px solid var(--line);background:#000}
+.field .shot .credits{line-height:1.6}
+.field .shot .credits b{color:var(--ink);font-weight:500}
+.field .shot .credits a{color:inherit}
 .lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto 1fr auto;gap:14px 28px;align-items:stretch;min-width:0}
 .lanes-t,.lanes-k{grid-column:1 / -1}
 .lanes-t{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -871,6 +876,14 @@ footer .wrap{padding-block:28px;font-family:var(--mono);font-size:.75rem;color:v
           </svg>
           </div>
           <figcaption>Blue: the loop every test step goes through. Shaded: the two mode groups, one running at a time. Dashed: simulation stand-ins behind fixed interfaces, to be swapped for hardware.</figcaption>
+        </figure>
+        <figure class="shot demo">
+          <video controls muted playsinline preload="none" poster="img/poctbot_demo_poster.jpg" width="1920" height="1080" aria-label="Simulation video. The robot is called to a bed on a busy hospital floor, drives to the bedside, picks a chip from onboard storage, loads the sample by pipette, places the chip in the reaction cell, shows a mock positive result, discards the chip, returns to the ward's standby point and leaves to wait for the next call.">
+            <source src="img/poctbot_demo.mp4" type="video/mp4">
+            <a href="img/poctbot_demo.mp4">Download the simulation video (MP4, 62 s)</a>
+          </video>
+          <figcaption>One bedside test in simulation (ROS 2 and Gazebo), edited from two runs on the same hospital floor, with and without people in the corridors. Sped up where marked; the reaction step is a mock.<br>
+          <span class="cite credits"><b>Credits.</b> Built with ROS 2 Jazzy, Gazebo Harmonic, Nav2 and MoveIt 2, with ros2_control, BehaviorTree.CPP, OMPL, AprilTag, slam_toolbox and OpenCV. 3D models from Gazebo Fuel: <a href="https://fuel.gazebosim.org/1.0/OpenRobotics/models/Scrubs">Scrubs</a>, <a href="https://fuel.gazebosim.org/1.0/OpenRobotics/models/BPCart">BPCart</a> and <a href="https://fuel.gazebosim.org/1.0/OpenRobotics/models/BMWCart">BMWCart</a> by Open Robotics, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, used unmodified; ClassCBed by Open Robotics, Standing person and Walking person by Marina Kollmitz, and Cardboard box by Nate Koenig and Cole Biesemeyer, all CC0 1.0. All other scene geometry and the robot model were built by the author. Development was assisted by Anthropic's Claude and Claude Code (coding, documentation, planning and video editing).</span></figcaption>
         </figure>
       </div>
 
